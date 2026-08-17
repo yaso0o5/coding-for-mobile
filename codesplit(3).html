@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>CodeSplit — Live Preview</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#0b0d10;color:#f5f7fa;font-family:Inter,system-ui,sans-serif;height:100dvh;overflow:hidden}
+.app{height:100%;display:flex;flex-direction:column}
+header{height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;border-bottom:1px solid #20242b;background:#101318}
+.logo{font-weight:800;letter-spacing:-.4px}.logo span{color:#7c5cff}
+.actions{display:flex;gap:8px}
+button{border:1px solid #2b3038;background:#171b21;color:#fff;border-radius:9px;padding:8px 12px;font-weight:700}
+button.primary{background:#7c5cff;border-color:#7c5cff}
+.main{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#242830}
+.panel{min-width:0;min-height:0;background:#0e1115;display:flex;flex-direction:column;order:1}
+.panel-title{height:42px;display:flex;align-items:center;justify-content:space-between;padding:0 12px;border-bottom:1px solid #20242b;color:#aeb6c2;font-size:13px}
+.output{background:#080a0d;order:2}
+.preview-wrap{flex:1;display:flex;align-items:center;justify-content:center;padding:18px;overflow:auto}
+.phone{width:min(100%,390px);height:min(100%,760px);background:#fff;border-radius:24px;overflow:hidden;box-shadow:0 20px 60px #0008}
+.phone iframe{width:100%;height:100%;border:0;background:white}
+.editor{flex:1;position:relative;display:flex}
+textarea{width:100%;height:100%;resize:none;border:0;outline:0;background:#0b0d10;color:#d7deea;padding:16px;font:13px/1.6 ui-monospace,SFMono-Regular,Consolas,monospace;tab-size:2}
+.status{font-size:11px;color:#747d89}
+@media(max-width:700px){
+ header{height:52px}
+ .main{grid-template-columns:1fr 1fr}
+ .preview-wrap{padding:8px}
+ .phone{border-radius:16px}
+ .panel-title{padding:0 8px}
+ textarea{padding:10px;font-size:11px}
+ button{padding:7px 9px;font-size:11px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+  <div class="logo">Code<span>Split</span></div>
+  <div class="actions">
+    <button onclick="resetCode()">Reset</button>
+    <button class="primary" onclick="runCode()">Run ▶</button>
+  </div>
+</header>
+
+<main class="main">
+  <section class="panel output">
+    <div class="panel-title"><b>OUTPUT</b><span class="status">Live preview</span></div>
+    <div class="preview-wrap">
+      <div class="phone"><iframe id="preview" title="Live output"></iframe></div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="panel-title"><b>INPUT / CODE</b><span class="status">HTML</span></div>
+    <div class="editor">
+      <textarea id="code" spellcheck="false"><!doctype html>
+<html>
+<head>
+<style>
+  body {
+    margin: 0;
+    padding: 30px;
+    font-family: Arial;
+    background: #111;
+    color: white;
+  }
+  h1 { color: #8b5cf6; }
+  button {
+    padding: 12px 18px;
+    border: 0;
+    border-radius: 10px;
+    background: #8b5cf6;
+    color: white;
+  }
+</style>
+</head>
+<body>
+  <h1>Hello 👋</h1>
+  <p>Edit the code and press Run.</p>
+  <button>Test button</button>
+</body>
+</html></textarea>
+    </div>
+  </section>
+</main>
+</div>
+
+<script>
+const editor=document.getElementById('code');
+const frame=document.getElementById('preview');
+function runCode(){
+  const doc=frame.contentDocument||frame.contentWindow.document;
+  doc.open(); doc.write(editor.value); doc.close();
+}
+function resetCode(){
+  editor.value='<!doctype html>\\n<html>\\n<head>\\n<style>\\nbody{font-family:Arial;padding:30px;background:#111;color:white}\\nh1{color:#8b5cf6}\\n</style>\\n</head>\\n<body>\\n<h1>Hello 👋</h1>\\n<p>Edit the code and press Run.</p>\\n</body>\\n</html>';
+  runCode();
+}
+editor.addEventListener('input',()=>{});
+runCode();
+</script>
+</body>
+</html>
